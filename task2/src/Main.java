@@ -14,14 +14,17 @@ public class Main {
             System.exit(-1);
         }
 
-        Set<Integer> set = new HashSet<>();
+        Map<Integer, Integer> map = new HashMap<>();
         List<List<Integer>> pairs = new ArrayList<>();
         input.forEach(n -> {
-            if(set.contains(Math.abs(13 - n))) {
-                pairs.add(List.of(Collections.min(List.of(n, Math.abs(13 - n))),
-                        Collections.max(List.of(n, Math.abs(13 - n)))));
+            int remainder = Math.abs(13-n);
+            if(map.get(remainder) != null) {
+                for(int i=0; i<map.get(remainder); i++) {
+                    pairs.add(List.of(Collections.min(List.of(n, remainder)),
+                            Collections.max(List.of(n, remainder))));
+                }
             }
-            set.add(n);
+            map.merge(n, 1, Integer::sum);
         });
         pairs.stream()
                 .sorted(Comparator.comparingInt(n -> n.get(0)))
